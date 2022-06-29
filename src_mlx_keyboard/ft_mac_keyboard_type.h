@@ -9,6 +9,8 @@ typedef struct s_key_hold
 	float	z;
 
 	int		zoom;
+	int		shift;
+	int		contour_line;
 } t_key_hold;
 
 typedef struct s_keyboard

@@ -25,6 +25,7 @@ typedef	struct s_param
 	t_xyz	xyz;
 	float	angle;
 	float	zoom;
+	float	contour_line;
 
 	__int128 time;
 

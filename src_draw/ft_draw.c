@@ -5,8 +5,9 @@ t_dot   ft_symtax_pixel(t_param param, t_dot dot)
 {
     dot.x *= param.zoom;
     dot.y *= param.zoom;
+    dot.z *= param.zoom;
     dot.x = (dot.x - dot.y) * ft_cos(0.4);
-    dot.y = (dot.x + dot.y) * ft_sin(0.4) - dot.z * 2;
+    dot.y = (dot.x + dot.y) * ft_sin(0.4) - dot.z;
     return (dot);
 }
 
@@ -58,7 +59,7 @@ t_xyz    ft_ratio_init(t_xyz *c_ratio, t_dot position_dot, t_dot next_dot)
     return (*c_ratio);
 }
 
-void    ft_auto_pixel_put(t_param param, t_dot position_dot, int color)
+int    ft_auto_pixel_put(t_param param, t_dot position_dot, int color)
 {
     float x;
     float y;
@@ -66,16 +67,23 @@ void    ft_auto_pixel_put(t_param param, t_dot position_dot, int color)
     x = position_dot.x + WIN_WIDTH/2 + param.xyz.x;
     y =  position_dot.y + WIN_HEIGHT/2 + param.xyz.y;
 
-    if (0 < x && x < WIN_WIDTH && 0 < y && y < WIN_HEIGHT)
-        mlx_pixel_put(param.mlx_ptr, param.win_ptr, x, y, color);
+    if (!(0 < x && x < WIN_WIDTH && 0 < y && y < WIN_HEIGHT))
+        return (0);
+    mlx_pixel_put(param.mlx_ptr, param.win_ptr, x, y, color);
+    return (1);
 }
 
-void    ft_auto_ratio_draw(t_param param, t_dot *position_dot, t_xyz c_allow, t_xyz c_ratio)
+int    ft_auto_ratio_draw(t_param param, t_dot *position_dot, t_xyz c_allow, t_xyz c_ratio)
 {
-    ft_auto_pixel_put(param, *position_dot, ft_draw_color(position_dot->z * 10));
+    int color;
+
+    color = ft_draw_color((position_dot->z / param.zoom * param.contour_line));
+    if (!ft_auto_pixel_put(param, *position_dot, color))
+        return (0);
     position_dot->x += c_allow.x * c_ratio.x;
     position_dot->y += c_allow.y * c_ratio.y;
     position_dot->z += c_allow.z * c_ratio.z;
+    return (1);
 }
 
 void    ft_auto_line_draw(t_param param, t_dot position_dot, t_dot next_dot)
@@ -87,14 +95,23 @@ void    ft_auto_line_draw(t_param param, t_dot position_dot, t_dot next_dot)
     ft_allow_init(&c_allow, position_dot, next_dot);
 
     if (c_ratio.x == 1)
+    {
         while (ft_abs(position_dot.x) <= ft_abs(next_dot.x))
-            ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio);
+            if (!ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio))
+                break ;
+    }
     else if (c_ratio.y == 1)
+    {
         while (ft_abs(position_dot.y) <= ft_abs(next_dot.y))
-            ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio);
+            if (!ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio))
+                break ;
+    }
     else if (c_ratio.z == 1)
+    {
         while (ft_abs(position_dot.z) <= ft_abs(next_dot.z))
-            ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio);
+            if (!ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio))
+                break ;
+    }
 }
 
 void ft_draw_dot_auto(t_param param)
