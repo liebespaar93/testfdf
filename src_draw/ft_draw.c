@@ -3,7 +3,6 @@
 
 t_dot   ft_symtax_pixel(t_param param, t_dot dot)
 {
-	mlx_clear_window(param.mlx_ptr, param.win_ptr); 
     dot.x *= param.zoom;
     dot.y *= param.zoom;
     dot.x = (dot.x - dot.y) * ft_cos(0.4);
@@ -61,14 +60,14 @@ t_xyz    ft_ratio_init(t_xyz *c_ratio, t_dot position_dot, t_dot next_dot)
 
 void    ft_auto_pixel_put(t_param param, t_dot position_dot, int color)
 {
-    if (-WIN_WIDTH/2 < position_dot.x && position_dot.x < WIN_WIDTH/2 && -WIN_HEIGHT/2 < position_dot.y && position_dot.y < WIN_HEIGHT/2)
-    {
-        mlx_pixel_put(param.mlx_ptr, \
-        param.win_ptr, \
-        position_dot.x + WIN_WIDTH/2 + param.xyz.x, \
-        position_dot.y + WIN_HEIGHT/2 + param.xyz.y, \
-        color);
-    }
+    float x;
+    float y;
+
+    x = position_dot.x + WIN_WIDTH/2 + param.xyz.x;
+    y =  position_dot.y + WIN_HEIGHT/2 + param.xyz.y;
+
+    if (0 < x && x < WIN_WIDTH && 0 < y && y < WIN_HEIGHT)
+        mlx_pixel_put(param.mlx_ptr, param.win_ptr, x, y, color);
 }
 
 void    ft_auto_ratio_draw(t_param param, t_dot *position_dot, t_xyz c_allow, t_xyz c_ratio)
