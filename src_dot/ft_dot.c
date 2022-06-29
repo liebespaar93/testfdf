@@ -13,7 +13,8 @@ t_dot *ft_new_dot(int value, t_xyz position)
 	new_dot->life = 1;
     new_dot->x = position.x;
     new_dot->y = position.y;
-    new_dot->z = position.z;
+    //new_dot->z = position.z;
+    new_dot->z = value;
 	new_dot->value = value;
     return (new_dot);
 }
@@ -34,6 +35,8 @@ t_dot *ft_dot_init_1D(t_dot_header *head_dot_ptr, t_dot *line_dot, t_xyz positio
 	while (len--)
 	{
 		new_dot = ft_dot_add_x(&new_dot, ft_new_dot(ft_atoi_move(&str), position), 1);
+		if (head_dot_ptr->max_len_z < new_dot->z)
+			head_dot_ptr->max_len_z = new_dot->z;
 		if (!head_dot)
 			head_dot = new_dot;
 		if (line_dot && ft_dot_add_y(&line_dot, new_dot, 1))
@@ -60,7 +63,31 @@ t_dot	*ft_dot_init_2D(t_dot_header *head_dot_ptr, t_oneline *head_oneline, t_xyz
 		line_dot = line_dot->y_m;
 	return (line_dot);
 }
-
+#include <stdio.h>
+void ft_dot_print(t_dot *dot)
+{
+	t_dot dot_y;
+	t_dot dot_x;
+	
+	if (!dot)
+		return ;
+	dot_y = *dot;
+	while (1)
+	{
+		dot_x = dot_y;
+		while (1)
+		{
+			printf("%.0f\t", dot_x.z);
+			if (!dot_x.x_p)
+				break ;
+			dot_x = *dot_x.x_p;
+		}
+		printf("\n");
+		if (!dot_y.y_p)
+			break ;
+		dot_y = *dot_y.y_p;
+	}
+}
 t_dot_header *ft_dot_init(t_dot_header **head_dot_ptr, t_oneline *head_oneline)
 {
 	t_dot_header	*head_dot;
@@ -75,5 +102,6 @@ t_dot_header *ft_dot_init(t_dot_header **head_dot_ptr, t_oneline *head_oneline)
 	ft_memset(&position, 0, sizeof(t_xyz));
 	head_dot->head_dot = ft_dot_init_2D(head_dot, head_oneline, position);
 	ft_free_oneline(&head_oneline);
+	ft_dot_print(head_dot->head_dot);
 	return (head_dot);
 }

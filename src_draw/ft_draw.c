@@ -97,20 +97,17 @@ void    ft_auto_line_draw(t_param param, t_dot position_dot, t_dot next_dot)
     if (c_ratio.x == 1)
     {
         while (ft_abs(position_dot.x) <= ft_abs(next_dot.x))
-            if (!ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio))
-                break ;
+            ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio);
     }
     else if (c_ratio.y == 1)
     {
         while (ft_abs(position_dot.y) <= ft_abs(next_dot.y))
-            if (!ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio))
-                break ;
+            ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio);
     }
     else if (c_ratio.z == 1)
     {
         while (ft_abs(position_dot.z) <= ft_abs(next_dot.z))
-            if (!ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio))
-                break ;
+            ft_auto_ratio_draw(param, &position_dot, c_allow, c_ratio);
     }
 }
 

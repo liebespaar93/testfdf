@@ -1,6 +1,5 @@
 #include <ft_mac_mouse.h>
 
-#include <stdio.h>
 int ft_mouse_drag(int x, int y, t_param *param)
 {
 	if(param->mouse.hold.left)
@@ -24,7 +23,5 @@ int ft_mouse_drag(int x, int y, t_param *param)
 		param->mouse.hold.x = x;
 		param->mouse.hold.y = y;
 	}
-	printf("test:%d %d %d \n", param->mouse.hold.left, param->mouse.hold.right , param->mouse.hold.scroll);
-
     return (0);
 }

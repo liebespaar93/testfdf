@@ -35,16 +35,20 @@ t_param	*ft_param_init(t_param **param_ptr, t_dot_header *head_dot_ptr)
 	param->mlx_ptr = mlx_init();
 	param->win_ptr = mlx_new_window(param->mlx_ptr , WIN_WIDTH, WIN_HEIGHT, "Hello, World!");
 	param->head_dot = head_dot_ptr->head_dot;
-	param->zoom = 30;
+	param->zoom = 1;
 	param->angle = 0.4;
+	param->contour_line = 255 * 3 / head_dot_ptr->max_len_z;
 	return (param);
 }
 
+#include <stdio.h>
 int	ft_loop_event (t_param *param)
 {
 	ft_draw_dot_auto(*param);
 	mlx_clear_window(param->mlx_ptr,param->win_ptr);
 	ft_key_hold(param);
+
+	printf("%d\n",param->time);
 	param->time++;
 	return (0);
 }
@@ -57,12 +61,10 @@ int main(int ac, char **av)
 	t_param *param;
     t_dot_header   *header_dot;
 
-	if (!ft_dot_init(&header_dot, readfile("test.fdf")))
+	if (!ft_dot_init(&header_dot, readfile("test_maps/100-6.fdf")))
 		return (-1);
 	if (!ft_param_init(&param, header_dot))
 		return (-1);
-	param->zoom= 30;
-
 	/* keyboard set */
 	mlx_hook(param->win_ptr, 2, 0, key_down, param);
 	mlx_key_hook(param->win_ptr, key_up, param);
